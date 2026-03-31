@@ -1,14 +1,15 @@
 #include "WeatherLog.h"
+#include "WeatherRecCollector.h"
 #include "Math.h"
 #include "Utilities.h"
 #include "Vector.h"
-#include "Bst.h"
-#include "WeatherRecCollector.h"
-#include "Map.h"
 #include <iostream>
 #include <fstream>
 
-using namespace std;
+using std::ifstream;
+using std::cout;
+using std::cin;
+using std::endl;
 
 int main()
 {
@@ -21,6 +22,7 @@ int main()
 
     string fileName;
     WeatherLog wlog; //WindData object on stack
+
     while (getline(sourcefile, fileName))
     {
         ifstream infile ("data/"+fileName);
@@ -36,14 +38,15 @@ int main()
     }
     sourcefile.close(); //close data_source.txt
 
-
-
     int choice = 0;
     string tempStr;
     int tempYear, tempMonth;
     float tempTotal = 0;
     float tempMean = 0;
     float tempSD;
+    Vector<float> tempFloatVector;
+    WeatherRecCollector wc;
+
     while (choice!=5)//option 5 quits
     {
         DisplayMenu();
@@ -64,37 +67,34 @@ int main()
             case 1:
                 tempYear = InputYear();
                 tempMonth = InputMonth();
-                tempMean = wlog.WindMean(tempYear, tempMonth);
-                tempSD = wlog.WindStandardDeviation(tempYear, tempMonth);
+                wlog.Collect(tempYear, tempMonth);
+                wc.GetWind(tempFloatVector); //call w object
+                tempMean = calcMean(tempFloatVector);
+                tempSD = calcStandardDeviation(tempFloatVector);
                 Option1(tempYear, tempMonth, tempMean, tempSD); //prints values to screen
+                wc.ResetVector(tempFloatVector); //clear collector and tempFloatVector
                 break;
             case 2:
                 tempYear = InputYear();
-//                Vector<float> temperatureVector;
-//                for (int i=0; i<wlog.GetSize(); i++)
-//                    for (int j=1; j<12; j++)
-//                    {
-//                        tempMean = wlog.TemperatureMean(tempYear, j);
-//                    }
-                for (int i=1; i<=12; i++) //for each month
+                for (int i=1; i<13; i++)
                 {
-                    tempMean = wlog.TemperatureMean(tempYear, i);
-                    tempSD = wlog.TemperatureStandardDeviation(tempYear, i);
+                    wlog.Collect(tempYear, i);
+                    wc.GetTemp(tempFloatVector);
+                    tempMean = calcMean(tempFloatVector);
+                    tempSD = calcStandardDeviation(tempFloatVector);
                     Option2(i, tempMean, tempSD);
+                    wc.ResetVector(tempFloatVector);
                 }
                 break;
             case 3:
-                tempYear = InputYear();
-                for (int i=1; i<=12; i++) //for each month
-                {
-                    tempTotal = wlog.SolarRadSum(tempYear, i); //total
-                    Option3(i, tempTotal);
-                }
+                tempMonth = InputMonth();
+
+//                //applies to all years
+//                //print spcc
                 break;
             case 4:
                 tempYear = InputYear();
                 Option4(wlog, tempYear);
-                //print to file
                 break;
             case 5:
                 //breaks and exits (choice = 5)

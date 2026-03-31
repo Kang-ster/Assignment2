@@ -2,7 +2,9 @@
 #define WEATHERLOG_H_INCLUDED
 
 #include "WeatherRecType.h"
+#include "WeatherRecCollector.h"
 #include "Vector.h"
+#include "Map.h"
 #include "Bst.h"
 #include "Math.h"
 #include <iostream>
@@ -11,7 +13,10 @@
 using std::istream;
 using std::ostream;
 using std::string;
+//using std::map;
 
+typedef Bst<WeatherRecType> wrecBst;
+typedef Map<int, wrecBst> wrecMap;
 
 /** @class WeatherLog
  * @brief Object that contains a dynamic array of WeatherRecType objects
@@ -24,24 +29,18 @@ public:
     ///Default constructor for WindData object.
     WeatherLog();
 
-    void GetWindData(Vector<WeatherRecType> & weatherlog) const;
-    void SetWindData(const Vector<WeatherRecType> & weatherlog);
+    void Insert(int index, WeatherRecType &wrec);
 
+//    cdItr Begin();
+//    cdItr End();
     int GetSize();
-    //Vector<WeatherRecType> GetMonthData(int year, int month);
 
-    float WindMean(int year, int month);
-    float WindStandardDeviation(int year, int month);
-
-    float TemperatureMean(int year, int month);
-    float TemperatureStandardDeviation(int year, int month);
-
-    float SolarRadSum(int year, int month);
-
-    //bool IsDupe(Vector<WeatherRecType> warr, WeatherRecType wrec);
+    //collector functions
+    void Collect(int year, int month);
+    void PrintAll();
 
 private:
-    Vector<WeatherRecType> m_wind_data; //the vector
+    wrecMap m_wind_data; //container
 };
 
 ostream & operator<<(ostream & os, const WeatherLog & weatherlog);

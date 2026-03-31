@@ -25,6 +25,10 @@ public:
     Time();
     Time(int hour, int minute);
 
+    bool operator == (const Time &t) const;
+    bool operator > (const Time &t) const;
+    bool operator < (const Time &t) const;
+
     int GetHour() const;
     void SetHour(int hour);
 

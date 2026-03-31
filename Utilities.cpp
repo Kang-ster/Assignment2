@@ -54,31 +54,59 @@ void Option3(int month, float total)
     }
 }
 
-void Option4(WeatherLog wlog, int year)
+void Option4(WeatherLog wlog, int year) //PRINT TO 1DP*
 {
-    //wlog. call function from inside
-    Date tempDate;
     std::ofstream ofile ("WindTempSolar.csv");
     if ( !ofile) throw std::runtime_error("Output file was not created successfully. ");
 
+    WeatherRecCollector wc;
+    Vector<float> tempFloatVector;
+    float tempMean, tempSD, tempMAD, tempSum;
     ofile << year << '\n';
     for (int i=1; i<=12; i++) //each month
     {
         ofile << FormatMonth(i) << ",";
-        if (wlog.WindStandardDeviation(year, i)>0) { //validation
-            ofile << wlog.WindMean(year, i)
-            << "(" << wlog.WindStandardDeviation(year, i) << "),";
-        } else {
-            ofile << " " << ","; }
-        if (wlog.TemperatureStandardDeviation(year, i)>0) { //validation
-            ofile << wlog.TemperatureMean(year, i)
-            << "(" << wlog.TemperatureStandardDeviation(year, i) << "),";
-        } else {
-            ofile << " " << ","; }
-        if (wlog.SolarRadSum(year, i)>0) { //validation
-            ofile << wlog.SolarRadSum(year, i) << '\n';
-        } else {
-            ofile << " " << '\n'; }
+        //collect data for the month
+        wlog.Collect(year, i);
+        wc.GetWind(tempFloatVector); //wind speed
+        tempSD = calcStandardDeviation(tempFloatVector);
+        if (tempSD>0) //validation
+        {
+            tempMean = calcMean(tempFloatVector); //continue calculating
+            tempMAD = calcMAD(tempFloatVector);
+            ofile << toOneDecimal(tempMean) //print
+            << "(" << toOneDecimal(tempSD) << ", " << toOneDecimal(tempMAD) << "),";
+        }
+        else
+        {
+            ofile << ",";
+        }
+        tempFloatVector.Clear();
+        wc.GetTemp(tempFloatVector); //temperature
+        tempSD = calcStandardDeviation(tempFloatVector);
+        if (tempSD>0) //validation
+        {
+            tempMean = calcMean(tempFloatVector); //continue calculating
+            tempMAD = calcMAD(tempFloatVector);
+            ofile << toOneDecimal(tempMean) //print
+            << "(" << toOneDecimal(tempSD) << ", " << toOneDecimal(tempMAD) << "),";
+        }
+        else
+        {
+            ofile << ",";
+        }
+        tempFloatVector.Clear();
+        wc.GetSolar(tempFloatVector);
+        tempSum = calcSum(tempFloatVector);
+        if (tempSum>0) //validation
+        {
+            ofile << toOneDecimal(tempSum) << '\n';
+        }
+        else
+        {
+            ofile << '\n';
+        }
+        wc.ResetVector(tempFloatVector); //full reset
     }
     std::cout << "---File saved!--" << '\n';
 }

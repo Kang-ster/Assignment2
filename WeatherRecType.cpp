@@ -7,6 +7,54 @@ WeatherRecType::WeatherRecType()
     m_speed = 0.0;
 }
 
+bool WeatherRecType::operator == (const WeatherRecType &wrec) const
+{
+    Date tempDate;
+    wrec.GetDate(tempDate);
+    Time tempTime;
+    wrec.GetTime(tempTime);
+    return m_d == tempDate && m_t == tempTime;
+}
+bool WeatherRecType::operator > (const WeatherRecType &wrec) const
+{
+    Date tempDate;
+    wrec.GetDate(tempDate);
+    Time tempTime;
+    wrec.GetTime(tempTime);
+    if (wrec.m_d > tempDate)
+    {
+        return true;
+    }
+    else if (tempDate == m_d && m_t > tempTime)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool WeatherRecType::operator < (const WeatherRecType &wrec) const
+{
+    Date tempDate;
+    wrec.GetDate(tempDate);
+    Time tempTime;
+    wrec.GetTime(tempTime);
+    if (m_d < tempDate)
+    {
+        return true;
+    }
+    else if (m_d == tempDate && m_t < tempTime)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void WeatherRecType::GetDate(Date & date) const
 {
     date = m_d;

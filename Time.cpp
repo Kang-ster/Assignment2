@@ -6,6 +6,33 @@ Time::Time()
     m_minute = 0;
 }
 
+bool Time::operator == (const Time &t) const
+{
+    return m_hour == t.GetHour() && m_minute == t.GetMinute();
+}
+bool Time::operator > (const Time &t) const
+{
+    if (m_hour > t.GetHour())
+    {
+        return true;
+    }
+    else
+    {
+        return m_hour == t.GetHour() && m_minute > t.GetMinute();
+    }
+}
+bool Time::operator < (const Time &t) const
+{
+    if (m_hour < t.GetHour())
+    {
+        return true;
+    }
+    else
+    {
+        return m_hour == t.GetHour() && m_minute <  t.GetMinute();
+    }
+}
+
 Time::Time(int hour, int minute)
 {
     m_hour = hour;

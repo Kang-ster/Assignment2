@@ -1,12 +1,13 @@
 #include "Math.h"
 #include <iostream>
-using namespace std;
 
 float toOneDecimal(float num)
 {
-    //add .5
-    //trunc
-    //return
+    num += 0.05;
+    num *= 10;
+    num = std::trunc(num);
+    num /= 10;
+    return num;
 }
 
 float calcSum(Vector<float> numArr)

@@ -3,6 +3,7 @@
 
 #include "Date.h"
 #include "Time.h"
+#include "Vector.h"
 
 #include <iostream>
 #include <string>
@@ -27,8 +28,10 @@ public:
     ///Default constructor for WindData object.
     WeatherRecType();
 
-//    void GetWeather(WeatherRecType & w) const;
-//    void SetWeather(const WeatherRecType & w);
+    ///comparators for Bst
+    bool operator == (const WeatherRecType &wrec) const;
+    bool operator > (const WeatherRecType &wrec) const;
+    bool operator < (const WeatherRecType &wrec) const;
 
     /** @brief Passes m_d by reference
     *
