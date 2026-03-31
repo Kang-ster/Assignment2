@@ -1,7 +1,9 @@
 #ifndef BST_H_INCLUDED
 #define BST_H_INCLUDED
-#include "Vector.h"
 #include <iostream>
+
+using std::istream;
+using std::ostream;
 
 template <class T>
 struct Node{
@@ -50,7 +52,6 @@ public:
 
     ///overloaded inOrder
     void InOrder(void (*visit) (T&)) const;
-    //void InOrder(void (*visit) (T&, Vector<float> &visitArr)) const;
 
     /** @brief preOrder - Prints out the contents of the tree in Pre-Order Traversal
     *
@@ -73,6 +74,8 @@ public:
 
     ///overloaded postOrder
     void PostOrder(void (*visit) (T&)) const;
+
+    void PrintOstream(ostream& os, const Bst<T>& bst);
 
 private:
     ///m_root is a Node pointer. Node is a struct which contains data, left Node*, and right Node*
@@ -134,7 +137,6 @@ private:
 
     ///overloaded private inOrder
     void InOrderTraversal(Node<T> *nptr, void (*visit) (T&)) const;
-    void InOrderTraversal(Node<T> *nptr, void (*visit) (T&, Vector<float> &visitArr)) const;
 
     /** @brief preOrderTraversal - Private helper of preOrder()
     *
@@ -155,6 +157,8 @@ private:
 
     ///overloaded postOrderTraversal
     void PostOrderTraversal(Node<T> *nptr, void (*visit) (T&)) const;
+
+    void PrivatePrintOstream(Node<T> *nptr, ostream os);
 };
 
 template <class T>
@@ -377,6 +381,7 @@ bool Bst<T>::PrivateSearch(Node<T> *nptr, const T item, void (*visit) (T&))
 template <class T>
 void Bst<T>::InOrder() const
 {
+    std::cout<<"DEBUG: inorder called" << std::endl;
     InOrderTraversal(m_root);
 }
 
@@ -385,12 +390,6 @@ void Bst<T>::InOrder(void (*visit) (T&)) const
 {
     InOrderTraversal(m_root, *visit);
 }
-
-//template <class T>
-//void Bst<T>::InOrder(void (*visit) (T&, Vector<float> &visitArr)) const
-//{
-//    InOrderTraversal(m_root, *visit);
-//}
 
 template <class T>
 void Bst<T>::InOrderTraversal (Node<T> *nptr) const
@@ -405,17 +404,6 @@ void Bst<T>::InOrderTraversal (Node<T> *nptr) const
 
 template <class T>
 void Bst<T>::InOrderTraversal(Node<T> *nptr, void (*visit) (T&)) const
-{
-    if (nptr != nullptr)
-    {
-        InOrderTraversal(nptr->left, *visit);//print left
-        (*visit)(nptr->data);
-        InOrderTraversal(nptr->right, *visit);//print right
-    }
-}
-
-template <class T>
-void Bst<T>::InOrderTraversal(Node<T> *nptr, void (*visit) (T&, Vector<float> &visitArr)) const
 {
     if (nptr != nullptr)
     {
@@ -492,5 +480,29 @@ void Bst<T>::PostOrderTraversal (Node<T> *nptr, void (*visit) (T&)) const
         (*visit)(nptr->data);//access data
     }
 }
+
+template <class T>
+void Bst<T>::PrintOstream(ostream& os, const Bst<T>& bst)
+{
+    PrivatePrintOstream(bst.m_root, os);
+}
+
+template <class T>
+void Bst<T>::PrivatePrintOstream(Node<T> *nptr, ostream os)
+{
+    if (nptr != nullptr)
+    {
+        PrintOstream(nptr->left, os);//print left
+        os << nptr->data << '\n';
+        PrintOstream(nptr->right, os);//print right
+    }
+}
+
+//ostream & operator << (ostream& os, const Bst<class T>& bst)
+//{
+//        bst.PrintOstream(os, bst);
+//        return os;
+//}
+
 
 #endif // BST_H_INCLUDED
