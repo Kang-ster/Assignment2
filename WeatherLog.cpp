@@ -3,11 +3,7 @@ WeatherLog::WeatherLog()
 {
     //Date
     //Time
-//    wrecBst tempTree;
-//    for (int i=1; i<13; i++)
-//    {
-//        m_wind_data.insert({i,tempTree});
-//    }
+    //wrecMap m_wind_data
 }
 
 void WeatherLog::Insert(int index, WeatherRecType &wrec)

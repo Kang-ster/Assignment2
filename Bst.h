@@ -381,7 +381,7 @@ bool Bst<T>::PrivateSearch(Node<T> *nptr, const T item, void (*visit) (T&))
 template <class T>
 void Bst<T>::InOrder() const
 {
-    std::cout<<"DEBUG: inorder called" << std::endl;
+    std::cout<<"DEBUG: default inorder called" << std::endl;
     InOrderTraversal(m_root);
 }
 

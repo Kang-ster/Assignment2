@@ -182,7 +182,7 @@ ostream & operator<<(ostream & os, const WeatherRecType & w)
     w.GetDate(tempDate); //pass by reference
     w.GetTime(tempTime); //pass by reference
     os << tempDate << tempTime << " " << w.GetSpeed()
-    << " " << w.GetTemperature() << " " << w.GetSolarRadiation() << '\n';
+    << " " << w.GetTemperature() << " " << w.GetSolarRadiation(); //removed '\n'
 
     return os;
 }
@@ -195,7 +195,6 @@ istream & operator>>(istream & input, WeatherRecType & w)
     Date tempDate;
     Time tempTime;
 
-
     for (int i=0; i<18; i++) //WAST is array pos 0
     {
         if (i==17) //last line
@@ -207,7 +206,7 @@ istream & operator>>(istream & input, WeatherRecType & w)
         //faulty data checking
         if (tempString == "N/A" || tempString == "") //checks for spoiled sensors or empty cell
         {
-            std::cout << "Invalid data " << tempString << " was found within the file. "
+            std::cout << "Invalid data " << tempString << " was found. "
             << "Line will be rejected. " << std::endl;
             w.SetSolarRadiation(-1); //using negative SOLAR value as sentinel
             if (i!=17)

@@ -27,7 +27,7 @@ int main()
     {
         ifstream infile ("data/"+fileName);
             if ( !infile) return -1;
-        cout << "[DEBUGGING] Current fileName: " << fileName << '\n';
+        cout << "Currently reading file: " << fileName << '\n';
         try {
         infile >> wlog; //read from infile into W
         } catch (std::invalid_argument)
